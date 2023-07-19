@@ -1,0 +1,3 @@
+﻿INSERT INTO `users` (`username`, `password`, `nome_completo`, `cpf`, `data_nascimento`, `data_criacao`, `account_non_expired`, `account_non_locked`, `credentials_non_expired`, `enabled`) VALUES
+	('rcosta', '1e3cdeeaaaeeda173ff6d002e7cb5e3f91ebc354dcff52156c9eaba1793a3a5e5bee306c11099e22', 'Rafael Neres da Costa', '36419550840', '1989-05-29', '2023-07-19', b'1', b'1', b'1', b'1'),
+	('aria', '362ad02420268beeb22d3a1f0d92749df461d7f4b74c9433d7415bdeef1b2902f4eb1edaecb37cb3', 'Ariane de Souza Silva Costa', '36452243861', '1988-04-21', '2023-07-19', b'1', b'1', b'1', b'1');

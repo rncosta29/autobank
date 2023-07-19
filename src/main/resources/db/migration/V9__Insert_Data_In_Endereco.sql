@@ -1,0 +1,2 @@
+﻿INSERT INTO `endereco` (`cep`, `logradouro`, `endereco`, `numero`, `complemento`, `bairro`, `cidade`, `estado`) VALUES
+	('09912230', 'Rua', 'Bandeirantes', 239, 'Torre 2 - Ap 51', 'Conceição', 'Diadema', 'São Paulo')
