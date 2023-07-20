@@ -10,7 +10,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/DB_AUTOBANK?createDatabaseIfNotExist=true&useTimezone=true&serverTimezone=UTC
     username: root
-    password: 1234
+    password: R@fa2905
   jpa:
     hibernate:
       ddl-auto: none

@@ -63,7 +63,7 @@ public class User implements UserDetails, Serializable {
 	private Boolean enabled;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinTable(name = "cliente_endereco", joinColumns = {@JoinColumn (name = "id_cliente")},
+	@JoinTable(name = "user_endereco", joinColumns = {@JoinColumn (name = "id_user")},
 			inverseJoinColumns = {@JoinColumn (name = "id_endereco")})
 	private Endereco endereco;
 	
