@@ -1,15 +1,30 @@
 package br.com.rcosta.autobank.services;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.logging.Logger;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.rcosta.autobank.controller.UserController;
+import br.com.rcosta.autobank.exceptions.ResourceNotFoundException;
+import br.com.rcosta.autobank.mapper.DozzerMapper;
+import br.com.rcosta.autobank.model.Permission;
+import br.com.rcosta.autobank.model.User;
+import br.com.rcosta.autobank.model.vo.UserVO;
 import br.com.rcosta.autobank.model.vo.security.AccountCredentialsVO;
 import br.com.rcosta.autobank.model.vo.security.TokenVO;
+import br.com.rcosta.autobank.repositories.PermissionRepository;
 import br.com.rcosta.autobank.repositories.UserRepository;
 import br.com.rcosta.autobank.security.jwt.JwtTokenProvider;
 
@@ -23,16 +38,23 @@ public class AuthService {
 	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	private UserRepository repository;
+	private UserRepository userRepository;
 	
-	@SuppressWarnings("rawtypes")
-	public ResponseEntity signin(AccountCredentialsVO data) {
+	@Autowired
+	private PermissionRepository permissionRepository;
+	
+	@Autowired
+	private DelegatingPasswordEncoder passwordEncode;
+	
+	private Logger logger = Logger.getLogger(AuthService.class.getName());
+	
+	public ResponseEntity<TokenVO> signin(AccountCredentialsVO data) {
 		try {
 			var username = data.getUsername();
 			var password = data.getPassword();
 			
 			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-			var user = repository.findByUsername(username);
+			var user = userRepository.findByUsername(username);
 			var tokenResponse = new TokenVO();
 			if(user != null) {
 				tokenResponse = tokenProvider.createAccessToken(username, user.getRoles());
@@ -45,10 +67,9 @@ public class AuthService {
 			throw new BadCredentialsException("Invalid username/password !!!!");
 		}
 	}
-	
-	@SuppressWarnings("rawtypes")
-	public ResponseEntity refreshToken(String username, String refreshToken) {
-		var user = repository.findByUsername(username);
+
+	public ResponseEntity<TokenVO> refreshToken(String username, String refreshToken) {
+		var user = userRepository.findByUsername(username);
 		var tokenResponse = new TokenVO();
 		if(user != null) {
 			tokenResponse = tokenProvider.refreshToken(refreshToken);
@@ -57,5 +78,25 @@ public class AuthService {
 		}
 		
 		return ResponseEntity.ok(tokenResponse);
+	}
+	
+	public ResponseEntity<UserVO> save(UserVO model) throws Exception {
+		logger.info("Criando um novo usuário");
+		
+		Permission permission = permissionRepository.findById(1L).orElseThrow(() -> new ResourceNotFoundException("Nenhum registro encontrado para esse id!!!"));
+		var entity = DozzerMapper.parseObject(model, User.class);
+		
+		entity.setAccountNonExpired(true);
+		entity.setAccountNonLocked(true);
+		entity.setCredentialsNonExpired(true);
+		entity.setDataCriacao(new Date());
+		entity.setEnabled(true);
+		entity.setPassword(passwordEncode.encode(model.getPassword()));
+		entity.setPermissions(Arrays.asList(permission));
+		
+		var vo = DozzerMapper.parseObject(userRepository.save(entity), UserVO.class);
+		vo.add(linkTo(methodOn(UserController.class).findById(vo.getKey())).withSelfRel());
+		
+		return ResponseEntity.ok(vo);
 	}
 }

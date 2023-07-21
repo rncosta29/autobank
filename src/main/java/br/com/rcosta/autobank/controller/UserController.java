@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,20 +61,20 @@ public class UserController {
 		return userService.findById(id);
 	}
 	
-	@CrossOrigin(origins = { "http://localhost:8080" })
-	@PostMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML }, consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
-	@Operation(summary = "Criando um novo usuário", description = "Criando um novo usuário", tags = {"Usuario"}, responses = {
-			@ApiResponse(description = "Success", responseCode = "200", content = 
-					@Content(schema = @Schema(implementation = UserVO.class))
-			),
-			@ApiResponse(description = "Bad Request", responseCode = "204", content = @Content),
-			@ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
-			@ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
-	})
-	public UserVO create(@RequestBody UserVO vo) throws Exception {
-		
-		return userService.save(vo);
-	}
+//	@CrossOrigin(origins = { "http://localhost:8080" })
+//	@PostMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML }, consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
+//	@Operation(summary = "Criando um novo usuário", description = "Criando um novo usuário", tags = {"Usuario"}, responses = {
+//			@ApiResponse(description = "Success", responseCode = "200", content = 
+//					@Content(schema = @Schema(implementation = UserVO.class))
+//			),
+//			@ApiResponse(description = "Bad Request", responseCode = "204", content = @Content),
+//			@ApiResponse(description = "Unauthorized", responseCode = "401", content = @Content),
+//			@ApiResponse(description = "Internal Server Error", responseCode = "500", content = @Content)
+//	})
+//	public UserVO create(@RequestBody UserVO vo) throws Exception {
+//		
+//		return userService.save(vo);
+//	}
 	
 	@PutMapping(produces = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML }, consumes = { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.APPLICATION_YML })
 	@Operation(summary = "Updates a Person", description = "Updates a Person by passing in a Json, XML or YML representation of the person", tags = {"Usuario"}, responses = {

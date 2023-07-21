@@ -29,7 +29,7 @@ public class SecurityConfig {
 	private JwtTokenProvider tokenProvider;
 	
 	@Bean
-	PasswordEncoder passwordEncoder() {
+	public PasswordEncoder passwordEncoder() {
 		Map<String, PasswordEncoder> encoders = new HashMap<>();
 				
 		Pbkdf2PasswordEncoder pbkdf2Encoder = new Pbkdf2PasswordEncoder("", 8, 185000, SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
@@ -38,6 +38,11 @@ public class SecurityConfig {
 		passwordEncoder.setDefaultPasswordEncoderForMatches(pbkdf2Encoder);
 		return passwordEncoder;
 	}
+
+	/*@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}*/
 	
     @Bean
     AuthenticationManager authenticationManagerBean(
@@ -61,6 +66,7 @@ public class SecurityConfig {
                     		"/swagger-ui/**",
                     		"/v3/api-docs/**"
                 		).permitAll()
+                        .requestMatchers("/auth/create").hasAnyAuthority("ADMIN")
                         .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/users").denyAll()
                 )
