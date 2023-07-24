@@ -20,6 +20,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -71,6 +72,11 @@ public class User implements UserDetails, Serializable {
 	@JoinTable(name = "user_permission", joinColumns = {@JoinColumn (name = "id_user")},
 		inverseJoinColumns = {@JoinColumn (name = "id_permission")})
 	private List<Permission> permissions;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_conta", joinColumns = {@JoinColumn (name = "id_user")},
+		inverseJoinColumns = {@JoinColumn (name = "id_conta")})
+	private Conta conta;
 	
 	public User() {}
 
@@ -209,9 +215,25 @@ public class User implements UserDetails, Serializable {
 		this.password = password;
 	}
 
+	public Endereco getEndereco() {
+		return endereco;
+	}
+
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+
+	public Conta getConta() {
+		return conta;
+	}
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(accountNonExpired, accountNonLocked, cpf, credentialsNonExpired, dataCriacao,
+		return Objects.hash(accountNonExpired, accountNonLocked, conta, cpf, credentialsNonExpired, dataCriacao,
 				dataNascimento, enabled, endereco, id, nomeCompleto, password, permissions, userName);
 	}
 
@@ -225,8 +247,8 @@ public class User implements UserDetails, Serializable {
 			return false;
 		User other = (User) obj;
 		return Objects.equals(accountNonExpired, other.accountNonExpired)
-				&& Objects.equals(accountNonLocked, other.accountNonLocked) && Objects.equals(cpf, other.cpf)
-				&& Objects.equals(credentialsNonExpired, other.credentialsNonExpired)
+				&& Objects.equals(accountNonLocked, other.accountNonLocked) && Objects.equals(conta, other.conta)
+				&& Objects.equals(cpf, other.cpf) && Objects.equals(credentialsNonExpired, other.credentialsNonExpired)
 				&& Objects.equals(dataCriacao, other.dataCriacao)
 				&& Objects.equals(dataNascimento, other.dataNascimento) && Objects.equals(enabled, other.enabled)
 				&& Objects.equals(endereco, other.endereco) && Objects.equals(id, other.id)

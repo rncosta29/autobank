@@ -1,0 +1,3 @@
+﻿INSERT INTO `conta` (`agencia`, `conta`, `saldo`, `cartao_credito`, `numero_cartao_credito`, `dia_vencimento_cartao_credito`, `codigo_seguranca_cartao_credito`, `limite_cartao_credito`, `cartao_debito`, `numero_cartao_debito`, `limite_conta`, `data_vencimento_cartao_debito`, `codigo_seguranca_cartao_debito`, `saldo_limite_conta`) VALUES
+	(0146, 00012345, 0.00, b'0', null, null, null, null, b'1', '0000000000000000', b'0', '2030-05-10', 001, null),
+	(0396, 00012346, 10000.00, b'1', '1234432112344321', '22', 234, 5000.0, b'1', '0000000000000002', b'0', '2030-05-10', 001, null)
